@@ -26,7 +26,7 @@ var crops = {
 }
 
 module.exports.getCropsProducedByFarmer = function(farmerName) {
-  return Promise.resolve(crops[farmerName])
+  return Promise.resolve(crops[farmerName].map(function(crop) { return Promise.resolve(crop) }))
 }
 
 var fruitPower = {

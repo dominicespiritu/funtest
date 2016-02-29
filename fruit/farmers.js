@@ -9,7 +9,7 @@ var lib = require('../lib')
 var getFarmers = lib.getFarmers
 
 // Pass the farmer name.
-// Returns Promise< Array<Crop> >
+// Returns Promise< Array< Promise<Crop> > >
 //   Crop has the fields `type` and `units`
 var getCropsProducedByFarmer = lib.getCropsProducedByFarmer
 
