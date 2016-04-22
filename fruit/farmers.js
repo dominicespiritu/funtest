@@ -68,33 +68,35 @@ exports.calculateTotalFarmerFruitCost = function() {
 	return new Promise(function (fulfill, reject) {
 	  var farmers = lib.getFarmers();
 	  
-	  // console.log(farmers);
+	   // console.log(farmers);
 	  Promise.each(farmers, function(farmer){
-		Promise.all(lib.getCropsProducedByFarmer(farmer.name), function(item) {
+	  	console.log(farmer);
+	  	if(typeof farmer.retired === 'undefined' || farmer.retired === false){
+		  	Promise.all(lib.getCropsProducedByFarmer(farmer.name), function(item) {
 
-		}).then(function(results) {
+			}).then(function(results) {
 
-	    	Promise.resolve(results).then(function(values){
-	    		// console.log(values);
-	    		Promise.each(values,function(value){
-	    			//console.log(value);
-	    			Promise.resolve(lib.getCostOfSingleFruit(value.type)).then(function(cost){
-					// console.log(results[i]);
-					  // console.log(value.type + ' = ' + value.units + ' * ' + cost + ' current total ' + total_cost);
-					  total_cost += (value.units * cost)
-					  // console.log('new total ' + total_cost);
-					});
-	    		})
-	    	});
-		  
-		});
+		    	Promise.resolve(results).then(function(values){
+		    		// console.log(values);
+		    		Promise.each(values,function(value){
+		    			//console.log(value);
+		    			Promise.resolve(lib.getCostOfSingleFruit(value.type)).then(function(cost){
+						// console.log(results[i]);
+						  // console.log(value.type + ' = ' + value.units + ' * ' + cost + ' current total ' + total_cost);
+
+						  total_cost += (value.units * cost)
+						  // console.log('new total ' + total_cost);
+						});
+		    		})
+		    	});
+			  
+			});
+	  	}
+		
 
 	  }).then(function(){
-	  	// console.log('totalFruits');
-	  	// console.log(total_fruits)
-	  	// console.log('total_cost');
-	  	// console.log(total_cost);
-	  	// Promise.resolve(total_cost);
+	  	console.log(total_cost);
+	  	
 		return Promise.resolve(total_cost);
 	  });
 	});
