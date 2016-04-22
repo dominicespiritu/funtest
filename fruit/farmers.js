@@ -26,7 +26,33 @@ var getCostOfSingleFruit = lib.getCostOfSingleFruit
 // retired or not) using getFarmers and getCropsProducedByFarmer.
 exports.countNumberOfFruits = function() {
   // TODO: replace this with your code
-  return Promise.resolve(0)
+  // return Promise.resolve(0)
+  var total_fruits = 0;
+	return new Promise(function (fulfill, reject) {
+	  var farmers = lib.getFarmers();
+	  
+	  // console.log(farmers);
+	  Promise.each(farmers, function(farmer){
+    	Promise.all(lib.getCropsProducedByFarmer(farmer.name), function(item) {
+
+		}).then(function(results) {
+
+		    for(var i=0;i<results.length;i++){
+		    	// console.log(results[i]);
+		    	total_fruits = parseInt(total_fruits) + results[i].units;
+
+		    }
+		});
+
+	  }).then(function(){
+	  	// console.log('totalFruits');
+	  	// console.log(total_fruits)
+	  	
+	  	return Promise.resolve(total_fruits);
+		
+	  });
+	  	
+	});
 }
 
 // Calculate the cost of all non-retired farmers' fruits using the functions
@@ -36,5 +62,40 @@ exports.countNumberOfFruits = function() {
 // they have produced.
 exports.calculateTotalFarmerFruitCost = function() {
   // TODO: replace this with your code
-  return Promise.resolve(0)
+  // return Promise.resolve(0)
+  var total_fruits = 0;
+	var total_cost = 0;
+	return new Promise(function (fulfill, reject) {
+	  var farmers = lib.getFarmers();
+	  
+	  // console.log(farmers);
+	  Promise.each(farmers, function(farmer){
+		Promise.all(lib.getCropsProducedByFarmer(farmer.name), function(item) {
+
+		}).then(function(results) {
+
+	    	Promise.resolve(results).then(function(values){
+	    		// console.log(values);
+	    		Promise.each(values,function(value){
+	    			//console.log(value);
+	    			Promise.resolve(lib.getCostOfSingleFruit(value.type)).then(function(cost){
+					// console.log(results[i]);
+					  // console.log(value.type + ' = ' + value.units + ' * ' + cost + ' current total ' + total_cost);
+					  total_cost += (value.units * cost)
+					  // console.log('new total ' + total_cost);
+					});
+	    		})
+	    	});
+		  
+		});
+
+	  }).then(function(){
+	  	// console.log('totalFruits');
+	  	// console.log(total_fruits)
+	  	// console.log('total_cost');
+	  	// console.log(total_cost);
+	  	// Promise.resolve(total_cost);
+		return Promise.resolve(total_cost);
+	  });
+	});
 }
